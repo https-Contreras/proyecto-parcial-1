@@ -1,0 +1,178 @@
+/* ===== Modern Theme - GiftMatch ===== */
+
+/* Typography */
+* {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Body animated gradient background */
+body {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 40%, #0f172a 100%);
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 20%, rgba(217, 70, 239, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 60% 80%, rgba(251, 146, 60, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+body > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(139, 92, 246, 0.3);
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(139, 92, 246, 0.5);
+}
+
+/* Input focus glow effect */
+input[type="text"]:focus,
+input[type="date"]:focus {
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+}
+
+/* Checkbox custom accent */
+input[type="checkbox"] {
+    accent-color: #8b5cf6;
+}
+
+/* Button hover lift & glow */
+button {
+    letter-spacing: 0.01em;
+}
+
+/* Animated fade-in for steps */
+.step-section {
+    animation: fadeSlideIn 0.4s ease-out;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Result cards entrance animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Label text styling */
+label {
+    letter-spacing: 0.01em;
+}
+
+/* Selection option buttons subtle animation */
+.btn-motivo,
+.btn-presupuesto {
+    transition: all 0.25s ease;
+}
+
+.btn-motivo:hover,
+.btn-presupuesto:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.15);
+}
+
+/* Summary card glassmorphism touch */
+#step-5 .bg-violet-50 {
+    background: linear-gradient(135deg, rgba(245, 243, 255, 0.9), rgba(252, 231, 243, 0.5));
+    backdrop-filter: blur(8px);
+}
+
+/* Participant badge hover */
+#res-participantes span {
+    transition: all 0.2s ease;
+}
+
+#res-participantes span:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main hero image pulse */
+main img {
+    animation: gentlePulse 3s ease-in-out infinite;
+}
+
+@keyframes gentlePulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Title gradient text effect for h1 */
+main h1 {
+    text-shadow: 0 2px 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Back button hover arrow */
+#btn-back-2:hover,
+#btn-back-3:hover,
+#btn-back-4:hover {
+    color: #7c3aed;
+}
+
+/* Drag item grab style */
+[draggable="true"]:active {
+    cursor: grabbing;
+}
+
+/* SweetAlert2 theme override */
+.swal2-popup {
+    font-family: 'Inter', system-ui, sans-serif !important;
+    border-radius: 1rem !important;
+}
+
+.swal2-title {
+    font-family: 'Inter', system-ui, sans-serif !important;
+}
+
+/* Subtle card inner dividers */
+hr {
+    border-color: rgba(139, 92, 246, 0.15);
+}
