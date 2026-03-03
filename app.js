@@ -340,3 +340,363 @@ btnNext3.addEventListener('click', () => {
     step4.classList.remove('hidden');
 });
 
+// ====== REFERENCIAS DEL PASO 4 ======
+const botonesMotivo = document.querySelectorAll('.btn-motivo');
+const inputMotivoPersonalizado = document.getElementById('motivo-personalizado');
+const inputFecha = document.getElementById('fecha-evento');
+const botonesPresupuesto = document.querySelectorAll('.btn-presupuesto');
+const inputPresupuestoPersonalizado = document.getElementById('presupuesto-personalizado');
+const btnBack4 = document.getElementById('btn-back-4');
+const btnNext4 = document.getElementById('btn-next-4');
+const step5 = document.getElementById('step-5');
+
+// Variables para guardar la selección temporal
+let seleccionMotivo = '';
+let seleccionPresupuesto = '';
+
+// ====== LÓGICA DEL PASO 4 ======
+
+// Manejo de botones de Motivo
+botonesMotivo.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Quitar estilos activos de todos
+        botonesMotivo.forEach(b => {
+            b.classList.remove('bg-violet-100', 'border-violet-500', 'text-violet-700');
+            b.classList.add('bg-gray-100', 'border-transparent');
+        });
+        
+        // Poner estilo activo al clickeado
+        btn.classList.remove('bg-gray-100', 'border-transparent');
+        btn.classList.add('bg-violet-100', 'border-violet-500', 'text-violet-700');
+        
+        seleccionMotivo = btn.getAttribute('data-value');
+        
+        // Mostrar u ocultar el input personalizado
+        if (seleccionMotivo === 'Otro') {
+            inputMotivoPersonalizado.classList.remove('hidden');
+        } else {
+            inputMotivoPersonalizado.classList.add('hidden');
+        }
+    });
+});
+
+// Manejo de botones de Presupuesto
+botonesPresupuesto.forEach(btn => {
+    btn.addEventListener('click', () => {
+        // Quitar estilos activos de todos
+        botonesPresupuesto.forEach(b => {
+            b.classList.remove('bg-violet-100', 'border-violet-500', 'text-violet-700');
+            b.classList.add('bg-gray-100', 'border-transparent');
+        });
+        
+        // Poner estilo activo al clickeado
+        btn.classList.remove('bg-gray-100', 'border-transparent');
+        btn.classList.add('bg-violet-100', 'border-violet-500', 'text-violet-700');
+        
+        seleccionPresupuesto = btn.getAttribute('data-value');
+        
+        // Mostrar u ocultar el input personalizado
+        if (seleccionPresupuesto === 'Otro') {
+            inputPresupuestoPersonalizado.classList.remove('hidden');
+        } else {
+            inputPresupuestoPersonalizado.classList.add('hidden');
+        }
+    });
+});
+
+// Navegación
+btnBack4.addEventListener('click', () => {
+    document.getElementById('step-4').classList.add('hidden');
+    document.getElementById('step-3').classList.remove('hidden');
+});
+
+// Finalizar captura y validar
+btnNext4.addEventListener('click', () => {
+    // 1. Validar Motivo
+    let motivoFinal = seleccionMotivo;
+    if (seleccionMotivo === 'Otro') {
+        motivoFinal = inputMotivoPersonalizado.value.trim();
+    }
+    if (!motivoFinal) {
+        Swal.fire({ icon: 'warning', title: 'Falta el motivo', text: 'Selecciona o escribe el motivo del intercambio.', confirmButtonColor: '#7c3aed' });
+        return;
+    }
+
+    // 2. Validar Fecha
+    const fechaFinal = inputFecha.value;
+    if (!fechaFinal) {
+        Swal.fire({ icon: 'warning', title: 'Falta la fecha', text: 'Por favor, elige la fecha en la que se entregarán los regalos.', confirmButtonColor: '#7c3aed' });
+        return;
+    }
+
+    // 3. Validar Presupuesto
+    let presupuestoFinal = seleccionPresupuesto;
+    if (seleccionPresupuesto === 'Otro') {
+        presupuestoFinal = inputPresupuestoPersonalizado.value.trim();
+    }
+    if (!presupuestoFinal) {
+        Swal.fire({ icon: 'warning', title: 'Falta el presupuesto', text: 'Selecciona o escribe cuánto se debería gastar.', confirmButtonColor: '#7c3aed' });
+        return;
+    }
+
+    // Guardar todo en nuestro objeto principal
+    datosSorteo.evento = {
+        motivo: motivoFinal,
+        fecha: fechaFinal,
+        presupuesto: presupuestoFinal
+    };
+
+    // ¡Guardamos la versión final en el LocalStorage!
+    localStorage.setItem('datosSorteo', JSON.stringify(datosSorteo));
+
+    // Cambiar a la última pantalla
+    document.getElementById('step-4').classList.add('hidden');
+    step5.classList.remove('hidden');
+    
+    // Aquí mandaremos a llamar a la función para pintar el resumen (la haremos en el siguiente paso)
+    renderizarResumen(); 
+});
+
+// ====== REFERENCIAS DEL PASO 5 ======
+const resOrganizador = document.getElementById('res-organizador');
+const resMotivo = document.getElementById('res-motivo');
+const resFecha = document.getElementById('res-fecha');
+const resPresupuesto = document.getElementById('res-presupuesto');
+const resParticipantes = document.getElementById('res-participantes');
+const resTotalPart = document.getElementById('res-total-part');
+const resExclusiones = document.getElementById('res-exclusiones');
+
+const btnHacerSorteo = document.getElementById('btn-hacer-sorteo');
+const panelResultados = document.getElementById('panel-resultados');
+const listaResultadosDOM = document.getElementById('lista-resultados');
+const btnReiniciar = document.getElementById('btn-reiniciar');
+const btnBack5 = document.getElementById('btn-back-5');
+const accionesPreSorteo = document.getElementById('acciones-pre-sorteo');
+// ====== LÓGICA DEL PASO 5 ======
+
+// 1. Función para leer de LocalStorage y pintar el resumen
+window.renderizarResumen = function() {
+    // REQUISITO: Leer de localstorage (No de datos en memoria RAM)
+    const datosGuardados = JSON.parse(localStorage.getItem('datosSorteo'));
+    
+    if (!datosGuardados) return; // Por seguridad
+
+    resOrganizador.innerText = datosGuardados.organizador;
+    resMotivo.innerText = datosGuardados.evento.motivo;
+    resFecha.innerText = datosGuardados.evento.fecha;
+    resPresupuesto.innerText = datosGuardados.evento.presupuesto;
+    resTotalPart.innerText = datosGuardados.participantes.length;
+
+    // Pintar participantes como etiquetas (badges)
+    resParticipantes.innerHTML = '';
+    datosGuardados.participantes.forEach(p => {
+        resParticipantes.innerHTML += `<span class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-full text-sm font-medium shadow-sm">${p}</span>`;
+    });
+
+    // Pintar exclusiones
+    resExclusiones.innerHTML = '';
+    let hayExclusiones = false;
+    for (const [quienRegala, excluidos] of Object.entries(datosGuardados.exclusiones)) {
+        if (excluidos.length > 0) {
+            hayExclusiones = true;
+            resExclusiones.innerHTML += `<li><strong>${quienRegala}</strong> no le regala a: ${excluidos.join(', ')}</li>`;
+        }
+    }
+    if (!hayExclusiones) {
+        resExclusiones.innerHTML = `<li class="text-gray-400 italic">No hay exclusiones configuradas.</li>`;
+    }
+}
+
+// Para que se ejecute cuando pasemos del Paso 4 al Paso 5, busca en tu evento btnNext4.addEventListener 
+// la línea comentada // renderizarResumen(); y quítale las diagonales para activarla.
+
+// 2. Algoritmo del Sorteo
+function generarParesSorteo(participantes, exclusiones) {
+    let intentos = 0;
+    const maxIntentos = 2000; // Límite para evitar un ciclo infinito si es matemáticamente imposible
+
+    while (intentos < maxIntentos) {
+        // Clonamos el arreglo para desordenarlo
+        let receptores = [...participantes];
+        
+        // Mezclamos el arreglo aleatoriamente (Shuffle)
+        receptores.sort(() => Math.random() - 0.5);
+
+        let esValido = true;
+        let resultados = [];
+
+        for (let i = 0; i < participantes.length; i++) {
+            let dador = participantes[i];
+            let receptor = receptores[i];
+
+            // Regla 1: No me puedo regalar a mí mismo
+            if (dador === receptor) {
+                esValido = false;
+                break;
+            }
+
+            // Regla 2: Respetar exclusiones
+            if (exclusiones && exclusiones[dador] && exclusiones[dador].includes(receptor)) {
+                esValido = false;
+                break;
+            }
+
+            // Si pasa las reglas, guardamos el par
+            resultados.push({ dador, receptor });
+        }
+
+        // Si todos pasaron las reglas, tenemos un sorteo exitoso
+        if (esValido) {
+            return resultados;
+        }
+
+        intentos++; // Si falló, lo intentamos de nuevo
+    }
+
+    return null; // Si llegó a 2000 intentos y no pudo, es imposible con esas exclusiones
+}
+
+
+// Navegación para regresar al Paso 4
+btnBack5.addEventListener('click', () => {
+    document.getElementById('step-5').classList.add('hidden');
+    document.getElementById('step-4').classList.remove('hidden');
+});
+
+// 3. Evento de Hacer el Sorteo
+btnHacerSorteo.addEventListener('click', () => {
+    // Volvemos a leer del localStorage para asegurar que usamos los datos más recientes
+    const datos = JSON.parse(localStorage.getItem('datosSorteo'));
+    
+    // Mostramos un efecto de carga con SweetAlert2 para darle emoción
+    Swal.fire({
+        title: 'Mezclando nombres...',
+        html: 'Preparando el sorteo perfecto 🎲',
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    }).then(() => {
+        // Ejecutamos el algoritmo
+        const pares = generarParesSorteo(datos.participantes, datos.exclusiones);
+
+        if (!pares) {
+            Swal.fire('¡Error!', 'Es imposible hacer el sorteo con tantas exclusiones cruzadas. Por favor, elimina algunas exclusiones y vuelve a intentarlo.', 'error');
+            return;
+        }
+
+        // Si fue exitoso, guardamos los resultados en localStorage
+        datos.resultados = pares;
+        localStorage.setItem('datosSorteo', JSON.stringify(datos));
+
+        // Ocultamos el botón principal, mostramos los resultados y el botón de reinicio
+        accionesPreSorteo.classList.add('hidden');
+        panelResultados.classList.remove('hidden');
+        btnReiniciar.classList.remove('hidden');
+
+        // Pintamos los resultados en el HTML
+        listaResultadosDOM.innerHTML = '';
+        pares.forEach((par, index) => {
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 p-4 rounded-xl shadow-sm animate-fade-in-up';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-sm">${index + 1}</span>
+                        <span class="font-bold text-gray-800 text-lg">${par.dador}</span>
+                    </div>
+                    <div class="text-amber-600 font-bold mx-2">→ regala a →</div>
+                    <div class="font-bold text-gray-800 text-lg">${par.receptor}</div>
+                `;
+                listaResultadosDOM.appendChild(div);
+            }, index * 300); // Pequeño retraso escalonado para que aparezcan uno por uno (efecto visual)
+        });
+    });
+});
+
+// Evento para reiniciar todo
+btnReiniciar.addEventListener('click', () => {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "Se borrarán todos los datos y empezarás un nuevo intercambio.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#7c3aed',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, empezar de nuevo',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            localStorage.removeItem('datosSorteo'); // Limpiamos la memoria
+            location.reload(); // Recargamos la página para volver al inicio
+        }
+    });
+});
+
+
+// ====== INICIALIZACIÓN (MANTENER SESIÓN AL RECARGAR) ======
+window.addEventListener('DOMContentLoaded', () => {
+    // 1. Buscamos si hay datos guardados de una sesión anterior
+    const datosGuardados = localStorage.getItem('datosSorteo');
+    
+    if (datosGuardados) {
+        // 2. Restauramos nuestra variable global con los datos guardados
+        datosSorteo = JSON.parse(datosGuardados);
+        
+        // 3. Restauramos los datos en los inputs del Paso 1
+        if (datosSorteo.organizador) {
+            orgNombreInput.value = datosSorteo.organizador;
+            orgParticipaInput.checked = datosSorteo.organizadorParticipa;
+        }
+
+        // 4. Lógica para saltar a la pantalla correcta según el avance
+        
+        // CASO A: Ya se había hecho el sorteo -> Vamos a los Resultados
+        if (datosSorteo.resultados && datosSorteo.resultados.length > 0) {
+            mainScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            step1.classList.add('hidden');
+            document.getElementById('step-5').classList.remove('hidden');
+            
+            renderizarResumen();
+            
+            // Ocultamos el botón de sortear y mostramos los resultados directamente
+            btnHacerSorteo.classList.add('hidden');
+            panelResultados.classList.remove('hidden');
+            btnReiniciar.classList.remove('hidden');
+            
+            listaResultadosDOM.innerHTML = '';
+            datosSorteo.resultados.forEach((par, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-green-50 border border-green-200 p-4 rounded-xl shadow-sm';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="bg-green-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold">${index + 1}</span>
+                        <span class="font-bold text-gray-800 text-lg">${par.dador}</span>
+                    </div>
+                    <div class="text-green-600 font-bold mx-2">👉 regala a 👉</div>
+                    <div class="font-bold text-gray-800 text-lg">${par.receptor}</div>
+                `;
+                listaResultadosDOM.appendChild(div);
+            });
+        } 
+        // CASO B: Ya había configurado la fecha del evento -> Vamos al Resumen (Paso 5)
+        else if (datosSorteo.evento && datosSorteo.evento.fecha) {
+            mainScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            step1.classList.add('hidden');
+            document.getElementById('step-5').classList.remove('hidden');
+            renderizarResumen();
+        }
+        // CASO C: Ya tenía participantes agregados -> Vamos a la lista (Paso 2)
+        else if (datosSorteo.participantes && datosSorteo.participantes.length > 0) {
+            mainScreen.classList.add('hidden');
+            appContainer.classList.remove('hidden');
+            step1.classList.add('hidden');
+            step2.classList.remove('hidden');
+            renderizarParticipantes();
+        }
+    }
+});
+
