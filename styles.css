@@ -31,7 +31,7 @@ body::before {
     z-index: 0;
 }
 
-body > * {
+body > *:not(.swal2-container) {
     position: relative;
     z-index: 1;
 }
