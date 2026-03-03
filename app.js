@@ -42,7 +42,9 @@ btnNext1.addEventListener('click', () => {
             icon: 'warning',
             title: 'Falta tu nombre',
             text: 'Por favor, ingresa tu nombre para organizar el intercambio.',
-            confirmButtonColor: '#7c3aed' 
+            confirmButtonText: 'Entendido',
+            showClass: { popup: 'swal2-show' },
+            hideClass: { popup: 'swal2-hide' }
         });
         return; // ¡ESTE RETURN ES LA CLAVE PARA QUE SE DETENGA Y NO AVANCE!
     }
@@ -182,11 +184,13 @@ function agregarParticipante() {
     // Evitamos nombres duplicados para no romper la lógica del sorteo después
     if (datosSorteo.participantes.includes(nombre)) {
         Swal.fire({
-        icon: 'error',
-        title: 'Nombre duplicado',
-        text: 'Ese nombre ya está en la lista. Agrega una inicial o apellido para diferenciarlo.',
-        confirmButtonColor: '#7c3aed'
-    });
+            icon: 'error',
+            title: 'Nombre duplicado',
+            text: 'Ese nombre ya está en la lista. Agrega una inicial o apellido para diferenciarlo.',
+            confirmButtonText: 'Entendido',
+            showClass: { popup: 'swal2-show' },
+            hideClass: { popup: 'swal2-hide' }
+        });
         return;
     }
 
@@ -222,7 +226,9 @@ btnNext2.addEventListener('click', () => {
             icon: 'info',
             title: 'Faltan participantes',
             text: 'Agrega al menos 3 participantes para poder realizar el sorteo.',
-            confirmButtonColor: '#7c3aed'
+            confirmButtonText: 'Entendido',
+            showClass: { popup: 'swal2-show' },
+            hideClass: { popup: 'swal2-hide' }
         });
         return;
     }
