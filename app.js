@@ -24,7 +24,6 @@ let datosSorteo = {
     }
 };
 
-// ====== EVENTOS ======
 
 // 1. Iniciar Sorteo (Oculta portada, muestra formulario)
 btnIniciar.addEventListener('click', () => {
@@ -46,7 +45,7 @@ btnNext1.addEventListener('click', () => {
             showClass: { popup: 'swal2-show' },
             hideClass: { popup: 'swal2-hide' }
         });
-        return; // ¡ESTE RETURN ES LA CLAVE PARA QUE SE DETENGA Y NO AVANCE!
+        return;
     }
 
     // Actualizamos nuestro objeto de estado
@@ -63,7 +62,7 @@ btnNext1.addEventListener('click', () => {
         datosSorteo.participantes = datosSorteo.participantes.filter(p => p !== nombre);
     }
 
-    // ¡REQUISITO CLAVE! Guardamos el objeto en el localStorage 
+    //  Guardamos el objeto en el localStorage 
     localStorage.setItem('datosSorteo', JSON.stringify(datosSorteo));
 
     // Renderizamos la lista de participantes y avanzamos de pantalla
@@ -79,7 +78,6 @@ const btnNext2 = document.getElementById('btn-next-2');
 const btnBack2 = document.getElementById('btn-back-2');
 const step3 = document.getElementById('step-3'); 
 
-// ====== LÓGICA DEL PASO 2 ======
 
 // Función que dibuja la lista de participantes en el HTML
 // ====== LÓGICA DEL PASO 2 ======
@@ -96,7 +94,7 @@ function renderizarParticipantes() {
     datosSorteo.participantes.forEach((nombre, index) => {
         const div = document.createElement('div');
         
-        // ¡Magia de Drag and Drop! Le decimos que es arrastrable y guardamos su índice
+        // es arrastrable y guardamos su índice
         div.draggable = true;
         div.dataset.index = index;
         
@@ -142,7 +140,7 @@ function renderizarParticipantes() {
             this.classList.remove('border-violet-500', 'bg-violet-100', 'scale-105');
         });
 
-        // 5. ¡Cuando lo soltamos! Aquí hacemos el cambio en el arreglo
+        // 5. Cuando lo soltamos hacemos el cambio en el arreglo
         div.addEventListener('drop', function(e) {
             e.stopPropagation();
             const dropIndex = Number(this.dataset.index);
